@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:news_app/const/theme_data.dart';
+import 'package:news_app/provider/dark_theme_provider.dart';
 import 'package:news_app/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,15 +13,42 @@ void main() {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  DarkThemProvider themeChangeProvider = DarkThemProvider();
+
+  void getCurrentTheme() async {
+    themeChangeProvider.setDarkTheme =
+        await themeChangeProvider.darkThemePrefs.getTheme();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentTheme();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: Styles.themeData(true, context),
-        home: const HomeScreen());
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) {
+          return themeChangeProvider;
+        })
+      ],
+      child:
+          Consumer<DarkThemProvider>(builder: (context, themeProvider, child) {
+        return MaterialApp(
+            title: 'Flutter Demo',
+            theme: Styles.themeData(themeProvider.getDarkTheme, context),
+            home: const HomeScreen());
+      }),
+    );
   }
 }
