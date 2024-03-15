@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
 
+import 'global_colors.dart';
+
 class Styles {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     return ThemeData(
-        scaffoldBackgroundColor:
-            isDarkTheme ? const Color(0xff00001a) : const Color(0xffffffff),
-        primaryColor: Colors.blue,
-        colorScheme: ThemeData().colorScheme.copyWith(
-              secondary: isDarkTheme
-                  ? const Color(0xff1a1f3c)
-                  : const Color(0xffe8fdfd),
-              brightness: isDarkTheme ? Brightness.dark : Brightness.light,
-            ),
-        cardColor:
-            isDarkTheme ? const Color(0xff0a0d2c) : const Color(0xfff2fdfd),
-        canvasColor: isDarkTheme ? Colors.black : Colors.green[50],
-        buttonTheme: Theme.of(context).buttonTheme.copyWith(
-            colorScheme: isDarkTheme
-                ? const ColorScheme.dark()
-                : const ColorScheme.light()));
+      scaffoldBackgroundColor:
+          isDarkTheme ? darkScaffoldColor : lightScaffoldColor,
+      primaryColor: isDarkTheme ? darkCardColor : lightCardColor,
+      hintColor: isDarkTheme ? Colors.grey.shade400 : Colors.grey.shade700,
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: isDarkTheme ? Colors.white : Colors.black,
+        selectionColor: Colors.blue,
+
+        // selectionHandleColor: Colors.blue,
+      ),
+      textTheme: Theme.of(context).textTheme.apply(
+            bodyColor: isDarkTheme ? Colors.white : Colors.black,
+            displayColor: isDarkTheme ? Colors.white : Colors.black,
+          ),
+      cardColor: isDarkTheme ? darkCardColor : lightCardColor,
+      brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+      colorScheme: ThemeData()
+          .colorScheme
+          .copyWith(
+            secondary: isDarkTheme ? darkIconsColor : lightIconsColor,
+            brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+          )
+          .copyWith(
+              background:
+                  isDarkTheme ? darkBackgroundColor : lightBackgroundColor),
+    );
   }
 }
